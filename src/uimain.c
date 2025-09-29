@@ -59,8 +59,9 @@ int main(void)
   print_tokens(tokens);
 
   /* save tokens into history */
-  for (int i = 0; tokens[i] != NULL; i++) {
-    add_history(history, tokens[i]);
+  int counter; //counter for while loop to test get history
+  for (counter; tokens[counter] != NULL; counter++) {
+    add_history(history, tokens[counter]);
   }
   /* show history */
 
@@ -68,10 +69,36 @@ int main(void)
   print_history(history);
 
   /* test get_history */
+  char input[MAX];
+  int number;
 
-  printf("\nTesting get_history:\n");
-  printf("ID 1 -> %s\n", get_history(history, 1));
+  while (1) {
 
+    printf("\nTesting get_history, USE !<NUMBER> format (1-%d), use 'q' to quite.\n", counter);
+    if (!fgets(input, sizeof(input), stdin)) break;  // EOF protection
+
+    if (input[0] == 'q') {
+      printf("Exiting...\n");
+      break;
+    }
+    // Check for '!<number>' format
+    if (input[0] == '!') {
+
+      number = atoi(&input[1]);
+
+      if (number <= counter) {
+	printf("ID %d -> %s\n", number, get_history(history, number));
+      } else {
+	printf("Invalid: number must be less than %d.\n", counter);
+      }
+    }
+    else {
+      printf("Invalid input. Try again (use !<number> or 'q').\n");
+    }
+
+    
+
+  }
   /* clean up */
 
   free_tokens(tokens);
